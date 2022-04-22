@@ -5,7 +5,7 @@ import speech_recognition as sr
 # import nltk
 
 
-BG_GRAY = "#ABB2B9"
+BG_GRAY = "#ABB2B9" # gray
 BG_COLOR = "#17202A"
 TEXT_COLOR = "#EAECEE"
 
