@@ -1,0 +1,8 @@
+You need to put :
+
+
+'DeepSpeech/deepspeech-0.9.3-models.pbmm'
+'DeepSpeech/deepspeech-0.9.3-models.scorer'
+
+
+under DeepSpeech folder
