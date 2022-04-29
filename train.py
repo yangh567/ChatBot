@@ -117,12 +117,12 @@ for epoch in range(num_epochs):
 print(f'final loss: {loss.item():.4f}')
 
 data = {
-"model_state": model.state_dict(),
-"input_size": input_size,
-"hidden_size": hidden_size,
-"output_size": output_size,
-"all_words": all_words,
-"tags": tags
+    "model_state": model.state_dict(),
+    "input_size": input_size,
+    "hidden_size": hidden_size,
+    "output_size": output_size,
+    "all_words": all_words,
+    "tags": tags
 }
 
 FILE = "data.pth"
@@ -130,3 +130,26 @@ torch.save(data, FILE)
 
 print(f'training complete. file saved to {FILE}')
 
+############################### Some preliminary testings #############################################################
+
+msg = tokenize("I want to laugh")
+X = bag_of_words(msg, all_words)
+X = X.reshape(1, X.shape[0])
+X = torch.from_numpy(X).to(device)
+
+output = model(X)
+_, predicted = torch.max(output, dim=1)
+tag = tags[predicted.item()]
+print("The predicted tag is : ", tag)
+probs = torch.softmax(output, dim=1)
+
+prob = probs[0][predicted.item()]
+if prob.item() > 0.75:
+    for intent in intents['intents']:
+        if tag == intent["tag"]:
+            # print(f"{bot_name}: {random.choice(intent['responses'])}")
+            kk = random.choice(intent['responses'])
+            print("The response is : ", kk)
+else:
+    # print(f"{bot_name}: I do not understand... Could you please repeat?")
+    print("The response is : I don't know how to respond")

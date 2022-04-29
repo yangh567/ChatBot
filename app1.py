@@ -3,7 +3,9 @@ from chat1 import get_response, bot_name
 import speech_recognition as sr
 # import pyttsx3         # text to speech conversion library
 # import nltk
+from transcript import return_text
 
+import os; os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'
 
 BG_GRAY = "#ABB2B9" # gray
 BG_COLOR = "#17202A"
@@ -14,24 +16,12 @@ FONT_BOLD = "Helvetica 13 bold"
 
 
 def input_query():     # function to accept a command from the user
-    recognizer = sr.Recognizer()    # recognize the speech from audio source
-    mic = sr.Microphone()   # device_index=1   # sr.Microphone.list_microphone_names()
-    with mic as source:   # invoke microphone on the SR package with an alias named as source
-        print('start speaking....')
-        recognizer.pause_threshold = 0.5    #
-        recognizer.adjust_for_ambient_noise(source)
-        voice = recognizer.listen(source, timeout=8, phrase_time_limit=8)
-        # voice = recognizer.listen(source)
-        # listen method on the recognizer instant will record as transcribes from source as long as user speaks
-        try:
-            query = recognizer.recognize_google(voice).lower()
-            # passing the voice through Google search,or,bing,etc
-            # also convert the transcribed text into lower case
-            print('you said....', query)
-
-            return query
-        except Exception as ex:
-            print('No clue what you said: An exception', ex)
+    try:
+        query = return_text()
+        print('you said....', query)
+        return query
+    except Exception as ex:
+        print('No clue what you said: An exception', ex)
 
 
 class ChatApplication:
@@ -76,7 +66,7 @@ class ChatApplication:
         self.msg_entry = Entry(bottom_label, bg="#2C3E50", fg=TEXT_COLOR, font=FONT)
         self.msg_entry.place(relwidth=0.74, relheight=0.06, rely=0.008, relx=0.011)
         self.msg_entry.focus()
-        self.msg_entry.bind("<Return>", self._on_enter_pressed)
+        self.msg_entry.bind("<Return>", lambda: self._on_enter_pressed)
 
         # send button
         send_button = Button(bottom_label, text="Send", font=FONT_BOLD, width=20, bg=BG_GRAY,
@@ -103,7 +93,7 @@ class ChatApplication:
         self.text_widget.insert(END, msg2)
         self.text_widget.configure(state=DISABLED)
 
-        msg3 = f"press enter to speak\n\n"
+        msg3 = f"press send to speak\n\n"
         self.text_widget.configure(state=NORMAL)
         self.text_widget.insert(END, msg3)
         self.text_widget.configure(state=DISABLED)
@@ -111,7 +101,7 @@ class ChatApplication:
         self.text_widget.see(END)
 
     def speak_start(self):
-        mg3 = "press enter to speak\n\n"
+        mg3 = "press click send to speak\n\n"
         self._insert_message00(mg3)
 
     def _insert_message00(self, msg):
@@ -125,7 +115,6 @@ class ChatApplication:
         self.text_widget.configure(state=DISABLED)
 
         self.text_widget.see(END)
-
 
 if __name__ == "__main__":
     app = ChatApplication()

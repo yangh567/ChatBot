@@ -88,9 +88,7 @@ def get_response(msg):
 
     output = model(X)
     _, predicted = torch.max(output, dim=1)
-
     tag = tags[predicted.item()]
-
     probs = torch.softmax(output, dim=1)
     prob = probs[0][predicted.item()]
     if prob.item() > 0.75:
