@@ -1,8 +1,5 @@
 from tkinter import *
 from chat2 import get_response, bot_name, input_query
-import speech_recognition as sr
-# import pyttsx3         # text to speech conversion library
-# import nltk
 
 
 import os; os.environ['TF_CPP_MIN_LOG_LEVEL'] = '1'

@@ -8,7 +8,6 @@ import pyttsx3  # text to speech conversion library
 from Vosk_test import return_text
 import sounddevice as sd
 import vosk
-# import nltk
 
 engine = pyttsx3.init()  # this loads a speech engine driver
 voices = engine.getProperty('voices')  # grab the current value of the engine property: voices
