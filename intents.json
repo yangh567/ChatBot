@@ -1,12 +1,17 @@
 {"intents": [
         {"tag": "feel",
-         "patterns": ["I feel", "It feels", "It feels like", "It's like a", "I can feel as if", "feeling like"],
+         "patterns": ["I feel", "It feels", "It feels", "It's a", "I can feel as if", "feeling", "felt", "felt as if"],
          "responses": ["Please take your time. How would you describe this feel?", "How would you explain this feel to someone who hasn't experienced it?", "Just take your time. How would you explain this feeling?"],
          "context_set": ""
         },
         {"tag": "perceive",
          "patterns": ["I perceive", "sensation of", "perceived", "stimulating", "It stimulates"],
-         "responses": ["While you explore, where do you perceive?", "Where exactly do you perceive?", "Can you describe the perceived location?"],
+         "responses": ["While you explore, where do you perceive?", "I see. Where exactly do you perceive?", "Well, Can you describe the perceived location?"],
+         "context_set": ""
+        },
+        {"tag": "like",
+         "patterns": ["It's sort of like", "It's like", "It appears like", "It's like a", "like as if"],
+         "responses": ["Right. How would you describe this experience?", "How would you explain this experience?", "Just take your time. Is there anything that reminds you this experience?"],
          "context_set": ""
         },
         {"tag": "greeting",
@@ -27,14 +32,19 @@
          "responses": ["How would you describe this breezing feel?", "Please feel free to talk. How do you know that this is a breezing sensation?"],
          "context_set": ""
         },
+        {"tag": "blow",
+         "patterns": ["blowy", "blowing", "air blow"],
+         "responses": ["How would you describe this air blow sensation?", "Please feel free to talk. How do you know that this is a air blow sensation?"],
+         "context_set": ""
+        },
         {"tag": "palm",
          "patterns": ["It's on my palm", "palm", "inside my hand", "center of my palm", "located in my palm"],
-         "responses": ["Is there anywhere else do you perceive?", "How would you describe this feeling at your palm?", "What exactly do you feel at your palm?"],
+         "responses": ["Is there anywhere else do you perceive?", "How would you describe this feeling at your palm?", "What exactly do you feel at your palm?", "If you had to describe this to someone"],
          "context_set": ""
         },
         {"tag": "finger",
          "patterns": ["It's on my fingertip", "fingers", "between my fingers", "Going through my fingertip", "on my fingers"],
-         "responses": ["Is there anywhere else do you perceive?", "How would you describe this feeling at your fingers?", "What exactly do you feel at your fingers?"],
+         "responses": ["How would you describe this feeling at your fingers?", "What exactly do you feel at your fingers?"],
          "context_set": ""
         }
 

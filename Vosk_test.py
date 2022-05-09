@@ -5,6 +5,8 @@ import vosk
 import sys
 import json
 import time
+import keyboard
+
 
 q = queue.Queue()
 
@@ -33,10 +35,12 @@ def return_text(model, device_info):
 
         pre_time = time.time()
         timeout = time.time() + 50  # 5 second from now
+        print("listening...")
         while True:
-            print("listening...")
             # print("Passing time", time.time() - pre_time)
             data = q.get()
+            # if len(data) == 0:
+            #     break
             if rec.AcceptWaveform(data):
                 dict = json.loads(rec.Result())
                 txt = dict["text"]
@@ -50,7 +54,16 @@ def return_text(model, device_info):
             if time.time() > timeout:
                 print("Listening End")
                 break
-    return text
+
+            if keyboard.is_pressed("q"):
+                break
+        return text
+        # return text
+    # except '':
+    #     print('\nDone')
+    #     return text
+    # except Exception as e:
+    #     print("Fine")
 
 
 
