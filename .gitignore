@@ -1,2 +1,4 @@
 **/DeepSpeech/*.pbmm
 **/DeepSpeech/*.scorer
+**/model/*
+.idea
