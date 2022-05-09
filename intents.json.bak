@@ -38,8 +38,13 @@
          "context_set": ""
         },
         {"tag": "palm",
-         "patterns": ["It's on my palm", "palm", "inside my hand", "center of my palm", "located in my palm"],
+<<<<<<< HEAD
+         "patterns": ["It's on my palm", "palm", "inside my hand"],
          "responses": ["Is there anywhere else do you perceive?", "How would you describe this feeling at your palm?", "What exactly do you feel at your palm?", "If you had to describe this to someone"],
+=======
+         "patterns": ["It's on my palm", "palm", "inside my hand", "center of my palm", "located in my palm"],
+         "responses": ["Is there anywhere else do you perceive?", "How would you describe this feeling at your palm?", "What exactly do you feel at your palm?"],
+>>>>>>> 702e7eef3ed591fd22d2b69eb052dbb225fc6662
          "context_set": ""
         },
         {"tag": "finger",
