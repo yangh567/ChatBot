@@ -33,8 +33,8 @@ def return_text(model, device_info):
 
         pre_time = time.time()
         timeout = time.time() + 50  # 5 second from now
+        print("listening...")
         while True:
-            print("listening...")
             # print("Passing time", time.time() - pre_time)
             data = q.get()
             if rec.AcceptWaveform(data):
