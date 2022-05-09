@@ -212,4 +212,4 @@ def return_text():
 
     return main(ARGS_model, ARGS_scorer, ARGS_nospinner, ARGS_savewav)
 
-return_text()
+# return_text()
