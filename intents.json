@@ -44,7 +44,7 @@
         },
         {"tag": "finger",
          "patterns": ["It's on my fingertip", "fingers", "between my fingers", "Going through my fingertip", "on my fingers"],
-         "responses": ["Is there anywhere else do you perceive?", "How would you describe this feeling at your fingers?", "What exactly do you feel at your fingers?"],
+         "responses": ["How would you describe this feeling at your fingers?", "What exactly do you feel at your fingers?"],
          "context_set": ""
         }
 
