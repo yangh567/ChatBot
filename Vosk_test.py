@@ -90,12 +90,19 @@ def return_text(model, device_info):
             # txt = dict["text"]
             txt = recognizer.Result()[14:-3]
             text += (txt + ".")
-            # print(txt)
-            print("Listens again")
-        else:
-            dict = json.loads(recognizer.PartialResult())
-            txt = dict["partial"]
             print(txt)
+            # print("Listens again")
+        # else:
+        #     dict = json.loads(recognizer.PartialResult())
+        #     txt = dict["partial"]
             # text += (txt+".")
+        if "finished" in text:
+            break
 
     return text
+
+
+# model_speech = vosk.Model("model")
+# device_info = sd.query_devices(None, 'input')
+# model_speech = vosk.KaldiRecognizer(model_speech, int(device_info['default_samplerate']))
+# return_text(model_speech, device_info)
