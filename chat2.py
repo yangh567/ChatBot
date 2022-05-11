@@ -14,8 +14,12 @@ voices = engine.getProperty('voices')  # grab the current value of the engine pr
 engine.setProperty('voice', voices[0].id)  # this sets female voice... for male voice, set the index to
 engine.setProperty('rate', 140)
 
+# model_speech = vosk.Model("model")
+# device_info = sd.query_devices(None, 'input')
+
 model_speech = vosk.Model("model")
 device_info = sd.query_devices(None, 'input')
+model_speech = vosk.KaldiRecognizer(model_speech, int(device_info['default_samplerate']))
 
 def input_query():  # function to accept a command from the user
     try:
@@ -97,7 +101,7 @@ def get_response(msg):
         speak_va("I do not understand... Could you please repeat?")
         return "I do not understand... Could you please repeat?"
 
-# for step in range(3):
+# for step in range(5):
 #     sentence = input_query()
 #     if sentence == "quit":
 #         break
