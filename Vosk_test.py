@@ -79,6 +79,7 @@ def return_text(model, device_info):
     # pre_time = time.time()
     # timeout = time.time() + 50  # 5 second from now
     print("listening...")
+    pre_time = 0
     while True:
         # print("Passing time", time.time() - pre_time)
         if keyboard.is_pressed("q"):
@@ -90,12 +91,17 @@ def return_text(model, device_info):
             # txt = dict["text"]
             txt = recognizer.Result()[14:-3]
             text += (txt + ".")
+            pre_time = time.time()
             print(txt)
             # print("Listens again")
-        # else:
-        #     dict = json.loads(recognizer.PartialResult())
-        #     txt = dict["partial"]
+        else:
+            time_now = time.time()
+            if pre_time != 0:
+                print("user stopped", time_now - pre_time, "second")
+            # dict = json.loads(recognizer.PartialResult())
+            # txt = dict["partial"]
             # text += (txt+".")
+            pre_time = 0
         if "finished" in text:
             break
 
