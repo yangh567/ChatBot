@@ -87,11 +87,11 @@ def return_text(model, device_info):
             break
         data = stream.read(4096, exception_on_overflow = False)
         if recognizer.AcceptWaveform(data):
+            pre_time = time.time()
             # dict = json.loads(recognizer.Result())
             # txt = dict["text"]
             txt = recognizer.Result()[14:-3]
             text += (txt + ".")
-            pre_time = time.time()
             print(txt)
             # print("Listens again")
         else:
