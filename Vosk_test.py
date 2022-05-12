@@ -75,33 +75,34 @@ def return_text(model, device_info):
     stream = cap.open(format=pyaudio.paInt16, channels=1, rate=int(device_info['default_samplerate']), input=True, frames_per_buffer=8192)
     stream.start_stream()
     # rec = vosk.KaldiRecognizer(model, int(device_info['default_samplerate']))
-    #
-    # pre_time = time.time()
     # timeout = time.time() + 50  # 5 second from now
     print("listening...")
-    pre_time = 0
+    end_time = 0
     while True:
         # print("Passing time", time.time() - pre_time)
         if keyboard.is_pressed("q"):
             print("Listening End\n")
             break
-        data = stream.read(4096, exception_on_overflow = False)
+
+        # Start collecting voice
+        start_time = time.time()
+
+        if end_time != 0:
+            # user pause time is the time duration between finished speaking and next voice.
+            pause_time = start_time - end_time
+            print("User Paused: ", pause_time, "Seconds")
+            if pause_time > 10:
+                break
+        data = stream.read(4096, exception_on_overflow=False)
+
         if recognizer.AcceptWaveform(data):
-            pre_time = time.time()
-            # dict = json.loads(recognizer.Result())
-            # txt = dict["text"]
+            end_time = time.time()
             txt = recognizer.Result()[14:-3]
             text += (txt + ".")
             print(txt)
-            # print("Listens again")
         else:
-            time_now = time.time()
-            if pre_time != 0:
-                print("user stopped", time_now - pre_time, "second")
-            # dict = json.loads(recognizer.PartialResult())
-            # txt = dict["partial"]
-            # text += (txt+".")
-            pre_time = 0
+            dict = json.loads(recognizer.PartialResult())
+            txt = dict["partial"]
         if "finished" in text:
             break
 

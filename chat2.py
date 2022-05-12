@@ -21,6 +21,7 @@ model_speech = vosk.Model("model")
 device_info = sd.query_devices(None, 'input')
 model_speech = vosk.KaldiRecognizer(model_speech, int(device_info['default_samplerate']))
 
+
 def input_query():  # function to accept a command from the user
     try:
         query = return_text(model_speech, device_info)
@@ -101,7 +102,8 @@ def get_response(msg):
         speak_va("I do not understand... Could you please repeat?")
         return "I do not understand... Could you please repeat?"
 
-# for step in range(5):
+
+# for step in range(100):
 #     sentence = input_query()
 #     if sentence == "quit":
 #         break
