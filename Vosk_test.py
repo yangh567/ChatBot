@@ -86,23 +86,24 @@ def return_text(model, device_info):
 
         # Start collecting voice
         start_time = time.time()
-
         if end_time != 0:
             # user pause time is the time duration between finished speaking and next voice.
             pause_time = start_time - end_time
             print("User Paused: ", pause_time, "Seconds")
             if pause_time > 10:
                 break
+
         data = stream.read(4096, exception_on_overflow=False)
 
         if recognizer.AcceptWaveform(data):
-            end_time = time.time()
             txt = recognizer.Result()[14:-3]
             text += (txt + ".")
             print(txt)
+            end_time = time.time()
         else:
-            dict = json.loads(recognizer.PartialResult())
-            txt = dict["partial"]
+            # dict = json.loads(recognizer.PartialResult())
+            # txt = dict["partial"]
+            continue
         if "finished" in text:
             break
 
