@@ -68,13 +68,14 @@ def callback(indata, frames, time, status):
     #     #     print("Fine")
 
 
-
-## User pause time = (time when machine hears user's new speaking - time of the end of last speak accepted as waveform) - time when machine try to recognize user new speaking)
+# User pause time = (time when machine hears user's new speaking - time of the end of last speak accepted as
+# waveform) - time when machine try to recognize user new speaking)
 def return_text(model, device_info):
     text = ""
     recognizer = model
     cap = pyaudio.PyAudio()
-    stream = cap.open(format=pyaudio.paInt16, channels=1, rate=int(device_info['default_samplerate']), input=True, frames_per_buffer=8192)
+    stream = cap.open(format=pyaudio.paInt16, channels=1, rate=int(device_info['default_samplerate']), input=True,
+                      frames_per_buffer=8192)
     stream.start_stream()
     # rec = vosk.KaldiRecognizer(model, int(device_info['default_samplerate']))
     # timeout = time.time() + 50  # 5 second from now
@@ -82,9 +83,6 @@ def return_text(model, device_info):
     end_time = 0
     pause_time = 0
     while True:
-        if keyboard.is_pressed("q"):
-            print("Listening End\n")
-            break
 
         # Start collecting voice
         start_time = time.time()
@@ -95,14 +93,12 @@ def return_text(model, device_info):
             # (the next expected voice time will not be capture when user speak, instead,
             # the time will be captured after machine recognize user's new speak)
             pause_time = start_time - end_time
-            # if user pause more than 10 second (haven't deliver supposed speak), break
-            if pause_time >= 10:
-                print("Exceeded time limit for waiting for you to speak")
-                break
 
         data = stream.read(4096, exception_on_overflow=False)
         start_recognize = time.time()
-        if recognizer.AcceptWaveform(data):
+
+        # if the speak is done within 10 seconds and accepted
+        if pause_time < 10 and recognizer.AcceptWaveform(data):
             txt = recognizer.Result()[14:-3]
             text += (txt + ".")
             print(txt)
@@ -114,16 +110,24 @@ def return_text(model, device_info):
                 real_pause_time = pause_time - time_for_recognize
                 # print out the real time duration user spent before speaking
                 print("User Paused: ", real_pause_time, "Seconds")
-        else:
-            # dict = json.loads(recognizer.PartialResult())
-            # txt = dict["partial"]
-            continue
+        # else:
+        #     # dict = json.loads(recognizer.PartialResult())
+        #     # txt = dict["partial"]
+        #     continue
+        # if user pause more than 10 second and nothing detected (haven't deliver supposed speak), break
+        if pause_time >= 10:
+            if not recognizer.AcceptWaveform(data):
+                print("Exceeded time limit for waiting for you to speak")
+                break
+
+        if keyboard.is_pressed("q"):
+            print("Listening End\n")
+            break
+
         if "finished" in text:
             break
 
-
     return text
-
 
 # model_speech = vosk.Model("model")
 # device_info = sd.query_devices(None, 'input')
