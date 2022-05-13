@@ -68,6 +68,8 @@ def callback(indata, frames, time, status):
     #     #     print("Fine")
 
 
+
+## User pause time = (time when machine hears user's new speaking - time of the end of last speak accepted as waveform) - time when machine try to recognize user new speaking)
 def return_text(model, device_info):
     text = ""
     recognizer = model
@@ -78,8 +80,8 @@ def return_text(model, device_info):
     # timeout = time.time() + 50  # 5 second from now
     print("listening...")
     end_time = 0
+    pause_time = 0
     while True:
-        # print("Passing time", time.time() - pre_time)
         if keyboard.is_pressed("q"):
             print("Listening End\n")
             break
@@ -87,25 +89,38 @@ def return_text(model, device_info):
         # Start collecting voice
         start_time = time.time()
         if end_time != 0:
-            # user pause time is the time duration between finished speaking and next voice.
+            # user pause time is the time duration between finished speaking and next expected voice
+            # (user suppose to speak, but, not yet).
+
+            # (the next expected voice time will not be capture when user speak, instead,
+            # the time will be captured after machine recognize user's new speak)
             pause_time = start_time - end_time
-            print("User Paused: ", pause_time, "Seconds")
-            if pause_time > 10:
+            # if user pause more than 10 second (haven't deliver supposed speak), break
+            if pause_time >= 10:
+                print("Exceeded time limit for waiting for you to speak")
                 break
 
         data = stream.read(4096, exception_on_overflow=False)
-
+        start_recognize = time.time()
         if recognizer.AcceptWaveform(data):
             txt = recognizer.Result()[14:-3]
             text += (txt + ".")
             print(txt)
+            end_recognize = time.time()
+            # if he/she delivered expected speak, then, we need to strip off the time that machine listens and predicts
+            time_for_recognize = end_recognize - start_recognize
             end_time = time.time()
+            if pause_time != 0:
+                real_pause_time = pause_time - time_for_recognize
+                # print out the real time duration user spent before speaking
+                print("User Paused: ", real_pause_time, "Seconds")
         else:
             # dict = json.loads(recognizer.PartialResult())
             # txt = dict["partial"]
             continue
         if "finished" in text:
             break
+
 
     return text
 
