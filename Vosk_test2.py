@@ -80,20 +80,49 @@ def return_text(model, device_info):
     # rec = vosk.KaldiRecognizer(model, int(device_info['default_samplerate']))
     # timeout = time.time() + 50  # 5 second from now
     end_time = 0
-    user_speak_time = 0
+    pause_time = 0
     print("listening...")
     while True:
-        # Start collecting voice
-        start_speak = time.time()
-        data = stream.read(4096, exception_on_overflow=False)
-        if recognizer.AcceptWaveform(data):
-            if end_time > 0:
-                print("User Paused: ", start_speak - end_time, "Seconds")
-            txt = recognizer.Result()[14:-3]
-            text += (txt + ".")
-            print(txt)
-            end_time = time.time()
 
+        # Start collecting voice
+        start_time = time.time()
+        if end_time != 0:
+            # user pause time is the time duration between finished speaking and next expected voice
+            # (user suppose to speak, but, not yet).
+
+            # (the next expected voice time will not be capture when user speak, instead,
+            # the time will be captured after machine recognize user's new speak)
+            pause_time = start_time - end_time
+
+        data = stream.read(4096, exception_on_overflow=False)
+        start_speak = time.time()
+        # if the speak is done within 10 seconds and accepted
+        if len(data) > 0:
+            end_speak = time.time()
+            start_recognize = time.time()
+            if recognizer.AcceptWaveform(data) :
+                txt = recognizer.Result()[14:-3]
+                text += (txt + ".")
+                print(txt)
+                end_recognize = time.time()
+                # if he/she delivered expected speak, then, we need to strip off the time that machine listens and predicts
+                if pause_time != 0:
+                    real_pause_time = pause_time - (end_recognize - start_recognize) - (end_speak - start_speak)
+                    print("User Paused: ", real_pause_time, "Seconds")
+                end_time = time.time()
+
+
+        # else:
+        #     # dict = json.loads(recognizer.PartialResult())
+        #     # txt = dict["partial"]
+        #     continue
+        # if user pause more than 10 second and nothing detected (haven't deliver supposed speak), break
+
+
+        # if pause_time >= 10:
+        #     if not recognizer.AcceptWaveform(data):
+        #         print("Exceeded time limit for waiting for you to speak")
+        #         break
 
         if keyboard.is_pressed("q"):
             print("Listening End\n")
