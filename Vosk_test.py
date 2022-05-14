@@ -98,7 +98,7 @@ def return_text(model, device_info):
         start_recognize = time.time()
 
         # if the speak is done within 10 seconds and accepted
-        if pause_time < 10 and recognizer.AcceptWaveform(data):
+        if pause_time < 10 and recognizer.AcceptWaveform(data) and len(data) > 0:
             txt = recognizer.Result()[14:-3]
             text += (txt + ".")
             print(txt)
