@@ -103,8 +103,8 @@ def get_response(msg):
         return "I do not understand... Could you please repeat?"
 
 
-# for step in range(100):
-#     sentence = input_query()
-#     if sentence == "quit":
-#         break
-#     # get_response(sentence)
+for step in range(100):
+    sentence = input_query()
+    if sentence == "quit":
+        break
+    # get_response(sentence)
