@@ -23,12 +23,12 @@ model_speech = vosk.KaldiRecognizer(model_speech, int(device_info['default_sampl
 
 
 def input_query():  # function to accept a command from the user
-    try:
-        query = return_text(model_speech, device_info)
-        print('you said....', query)
-        return query
-    except Exception as ex:
-        print('No clue what you said: An exception', ex)
+    # try:
+    query = return_text(model_speech, device_info)
+    print('you said....', query)
+    return query
+    # except Exception as ex:
+    #     print('No clue what you said: An exception', ex)
 
 
 def speak_va(transcribed_query):  # result via voice
@@ -103,8 +103,8 @@ def get_response(msg):
         return "I do not understand... Could you please repeat?"
 
 
-for step in range(100):
-    sentence = input_query()
-    if sentence == "quit":
-        break
-    get_response(sentence)
+# for step in range(100):
+#     sentence = input_query()
+#     if sentence == "quit":
+#         break
+#     # get_response(sentence)
