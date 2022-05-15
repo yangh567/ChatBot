@@ -81,6 +81,8 @@ def return_text(model, device_info):
     # timeout = time.time() + 50  # 5 second from now
     end_time = 0
     user_speak_dur = []
+    user_not_speaking_duration = []
+    user_not_speaking_but_accepting_empty_str = 0
     print("listening...")
     while True:
         # Start collecting voice
@@ -89,7 +91,10 @@ def return_text(model, device_info):
             if recognizer.AcceptWaveform(data):
                 if end_time > 0:
                     if len(user_speak_dur) == 0:
-                        pass
+                        # print("empty string as waveform")
+                        user_not_speaking_duration.append(time.time())
+                        user_not_speaking_but_accepting_empty_str = user_not_speaking_duration[-1] - user_not_speaking_duration[0]
+                        # print("User Paused: ", user_not_speaking_but_accepting_empty_str, "Seconds")
                     else:
                         print("User Paused: ", user_speak_dur[0] - end_time, "Seconds")
                 txt = recognizer.Result()[14:-3]
@@ -103,8 +108,12 @@ def return_text(model, device_info):
                 if txts != "" and txts !="the":
                     start_time = time.time()
                     user_speak_dur.append(start_time)
+                    user_not_speaking_duration = []
         else:
             pass
+
+        if user_not_speaking_but_accepting_empty_str >= 10:
+            break
 
         if keyboard.is_pressed("q"):
             print("Listening End\n")
