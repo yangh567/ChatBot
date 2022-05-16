@@ -111,6 +111,7 @@ def return_text(model, device_info):
                     # print(txt)
                     user_speak_dur = []
                     end_time = time.time()
+                    not_speak_time.append(end_time)
             else:
                 start_time = time.time()
                 dict = json.loads(recognizer.PartialResult())
