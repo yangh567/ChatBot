@@ -5,7 +5,7 @@ import csv
 from model import NeuralNet
 from nltk_utils import bag_of_words, tokenize
 import pyttsx3  # text to speech conversion library
-from Vosk_test import return_text
+from Vosk_test_1 import return_text
 import sounddevice as sd
 import vosk
 
