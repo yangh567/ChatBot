@@ -2,6 +2,7 @@
 import queue
 import sounddevice as sd
 import vosk
+import os
 import sys
 import json
 import time
@@ -110,7 +111,7 @@ def return_text(model, device_info):
                         print("User Paused: ", user_speak_dur[0] - end_time, "Seconds")
                         txt = recognizer.Result()[14:-3]
                         text += (txt + ".")
-                        print(txt)
+                        # print(txt)
                         user_speak_dur = []
                         end_time = time.time()
                         user_not_speaking_duration.append(end_time)
@@ -128,7 +129,7 @@ def return_text(model, device_info):
                     else:
                         txt = recognizer.Result()[14:-3]
                         text += (txt + ".")
-                        print(txt)
+                        # print(txt)
                         user_speak_dur = []
                         end_time = time.time()
             else:
@@ -137,6 +138,8 @@ def return_text(model, device_info):
                 # when text is not waveform and are empty string and "the" (ambient noise)
                 # That means this is the start alpha of a word. Then, record the time when received it
                 if txts != "" and txts !="the":
+                    os.system("cls")
+                    print(txts)
                     start_time = time.time()
                     user_speak_dur.append(start_time)
                     user_not_speaking_duration = []
