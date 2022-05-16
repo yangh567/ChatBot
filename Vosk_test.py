@@ -85,7 +85,7 @@ def return_text(model, device_info):
     user_not_speaking_duration = []
     unaccept_time = []
     user_not_speaking_but_accepting_empty_str = 0
-    accept_waveform = True
+    accept_waveform = False
     print("listening...")
     while True:
         # Start collecting voice
