@@ -85,7 +85,6 @@ def return_text(model, device_info):
     user_not_speaking_duration = []
     unaccept_time = []
     user_not_speaking_but_accepting_empty_str = 0
-    user_not_speaking_but_unaccepting_empty_str = 0
     accept_waveform = True
     print("listening...")
     while True:
@@ -153,7 +152,7 @@ def return_text(model, device_info):
                 else:
                     if end_time > 0:
                         unaccept_time.append(start_time)
-                        user_not_speaking_but_unaccepting_empty_str = unaccept_time[-1] - end_time
+                        user_not_speaking_but_accepting_empty_str = unaccept_time[-1] - end_time
                         accept_waveform = True
                     # print("not accepted", txts)
                     else:
@@ -163,8 +162,8 @@ def return_text(model, device_info):
         else:
             pass
 
-        if user_not_speaking_but_accepting_empty_str + user_not_speaking_but_unaccepting_empty_str >= 10:
-            print(user_not_speaking_but_accepting_empty_str+user_not_speaking_but_unaccepting_empty_str)
+        if user_not_speaking_but_accepting_empty_str >= 10:
+            print(user_not_speaking_but_accepting_empty_str)
             break
 
         if keyboard.is_pressed("q"):
