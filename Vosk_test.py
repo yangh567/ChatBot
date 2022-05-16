@@ -89,6 +89,7 @@ def return_text(model, device_info):
     while True:
         # Start collecting voice
         data = stream.read(4096, exception_on_overflow=False)
+        user_not_speak = time.time()
         # if data is there
         if len(data) > 0:
             # if it is recognized as waveform
@@ -100,7 +101,7 @@ def return_text(model, device_info):
                     # so calculate the duration between showing of this noise and last properly spoken word's time
                     # if the duration is greater than 10 seconds, break
                     if len(user_speak_dur) == 0:
-                        user_not_speaking_duration.append(time.time())
+                        user_not_speaking_duration.append(user_not_speak)
                         user_not_speaking_but_accepting_empty_str = user_not_speaking_duration[-1] - user_not_speaking_duration[0]
                         # print("User empty Paused: ", user_not_speaking_but_accepting_empty_str, "Seconds")
                     # else, it means that user has speaked something properly
@@ -133,6 +134,7 @@ def return_text(model, device_info):
                         user_speak_dur = []
                         end_time = time.time()
             else:
+                start_time = time.time()
                 dict = json.loads(recognizer.PartialResult())
                 txts = str(dict["partial"])
                 # when text is not waveform and are empty string and "the" (ambient noise)
@@ -140,7 +142,6 @@ def return_text(model, device_info):
                 if txts != "" and txts !="the":
                     os.system("cls")
                     print(txts)
-                    start_time = time.time()
                     user_speak_dur.append(start_time)
                     user_not_speaking_duration = []
                 # Otherwise, user did not speak (there are noises) and thus if user have already spoken once,
@@ -149,7 +150,7 @@ def return_text(model, device_info):
                 # break
                 else:
                     if end_time > 0:
-                        unaccept_time.append(time.time())
+                        unaccept_time.append(start_time)
                         user_not_speaking_but_accepting_empty_str = unaccept_time[-1] - end_time
                     # print("not accepted", txts)
                     pass
