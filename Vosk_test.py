@@ -85,6 +85,8 @@ def return_text(model, device_info):
     user_not_speaking_duration = []
     unaccept_time = []
     user_not_speaking_but_accepting_empty_str = 0
+    user_not_speaking_but_unaccepting_empty_str = 0
+    accept_waveform = True
     print("listening...")
     while True:
         # Start collecting voice
@@ -93,7 +95,7 @@ def return_text(model, device_info):
         # if data is there
         if len(data) > 0:
             # if it is recognized as waveform
-            if recognizer.AcceptWaveform(data):
+            if recognizer.AcceptWaveform(data) and accept_waveform == True:
                 # if it is not first time user speak
                 if end_time > 0:
                     # if the first letter of spoken word is noise or empty string,
@@ -121,8 +123,7 @@ def return_text(model, device_info):
                 else:
                     # if there is no letter in list, means the noise is accepted as waveform, just pass
                     if len(user_speak_dur) == 0:
-                        # print("empty string and 'the' accepted as waveform")
-                        # print("Accepted", recognizer.Result()[14:-3])
+                        print("It is there")
                         pass
                     # if user spoke something, print out what user said.
                     # update the last last properly spoken word's time
@@ -140,6 +141,7 @@ def return_text(model, device_info):
                 # when text is not waveform and are empty string and "the" (ambient noise)
                 # That means this is the start alpha of a word. Then, record the time when received it
                 if txts != "" and txts !="the":
+                    accept_waveform = True
                     os.system("cls")
                     print(txts)
                     user_speak_dur.append(start_time)
@@ -151,15 +153,18 @@ def return_text(model, device_info):
                 else:
                     if end_time > 0:
                         unaccept_time.append(start_time)
-                        user_not_speaking_but_accepting_empty_str = unaccept_time[-1] - end_time
+                        user_not_speaking_but_unaccepting_empty_str = unaccept_time[-1] - end_time
+                        accept_waveform = True
                     # print("not accepted", txts)
+                    else:
+                        accept_waveform = False
                     pass
         # if no data, keep listening
         else:
             pass
 
-        if user_not_speaking_but_accepting_empty_str >= 10:
-            print(user_not_speaking_but_accepting_empty_str)
+        if user_not_speaking_but_accepting_empty_str + user_not_speaking_but_unaccepting_empty_str >= 10:
+            print(user_not_speaking_but_accepting_empty_str+user_not_speaking_but_unaccepting_empty_str)
             break
 
         if keyboard.is_pressed("q"):
