@@ -18,7 +18,7 @@ engine.setProperty('rate', 140)
 # device_info = sd.query_devices(None, 'input')
 
 model_speech = vosk.Model("model")
-device_info = sd.query_devices(None, 'input')
+device_info = sd.query_devices(1, 'input')
 model_speech = vosk.KaldiRecognizer(model_speech, int(device_info['default_samplerate']))
 
 
